@@ -1,6 +1,7 @@
 import {isObject} from "@my-vue/shared";
 
 import {reactive,readonly, ReactiveFlags, reactiveMap, readonlyMap, shallowReadonlyMap,} from './reactive'
+import {track, trigger} from "./effect";
 
 
 const get = createGetter();
@@ -16,23 +17,24 @@ const set = createSetter();
  * @param shallow 浅监听
  */
 function createGetter(isReadonly = false, shallow = false){
-    return function get(target:Object, flag:ReactiveFlags | string, receiver:Object){
-        const isExistInReactiveMap = ()=> flag === ReactiveFlags.RAW && receiver === reactiveMap.get(target); // 是否普通包装数据
-        const isExistInReadonlyMap = ()=> flag===ReactiveFlags.RAW && receiver === readonlyMap.get(target);  // 是否是只读已包装数据
-        const isExistInShallowReadonlyMap = ()=> flag === ReactiveFlags.RAW && reactive === shallowReadonlyMap.get(target) // 是否是浅只读包装数据
+    return function get(target:Object, key:ReactiveFlags | string, receiver:Object){
+        const isExistInReactiveMap = ()=> key === ReactiveFlags.RAW && receiver === reactiveMap.get(target); // 是否普通包装数据
+        const isExistInReadonlyMap = ()=> key===ReactiveFlags.RAW && receiver === readonlyMap.get(target);  // 是否是只读已包装数据
+        const isExistInShallowReadonlyMap = ()=> key === ReactiveFlags.RAW && reactive === shallowReadonlyMap.get(target) // 是否是浅只读包装数据
 
-        if (flag === ReactiveFlags.IS_REACTIVE) {
+        if (key === ReactiveFlags.IS_REACTIVE) {
             return !isReadonly;
-        } else if (flag === ReactiveFlags.IS_READONLY) {
+        } else if (key === ReactiveFlags.IS_READONLY) {
             return isReadonly;
         } else if (isExistInReactiveMap()|| isExistInReadonlyMap() || isExistInShallowReadonlyMap()){
             return target;
         }
 
-        const res = Reflect.get(target,flag,receiver);
+        const res = Reflect.get(target,key,receiver);
 
         if(!isReadonly){
             // 依赖收集
+            track(target,'get',key);
         }
 
         if(shallow){
@@ -52,6 +54,7 @@ function createSetter(){
     return function set(target:Object,key:string,value:unknown,receiver:Object){
         const result = Reflect.set(target,key, value ,receiver)
         // 触发依赖
+        trigger(target,'set',key);
         return result;
     }
 

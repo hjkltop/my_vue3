@@ -44,6 +44,12 @@ export const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.sli
 
 
 /**
+ * 添加on
+ * @param str
+ */
+export const toHandlerKey = (str:string) => str? `on${capitalize(str)}`: '';
+
+/**
  * @description: 正则驼峰，首字母加-
  * @param str
  */
