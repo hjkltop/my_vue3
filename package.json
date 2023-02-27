@@ -2,9 +2,11 @@
   "name": "my_vue3",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "lib/mini-vue.cjs.js",
+  "module": "lib/mini-vue.esm.js",
+  "type": "module",
   "scripts": {
-    "div": "roolup -c -w",
+    "dev": "rollup -c -w",
     "build": "rollup -c",
     "test": "vitest"
   },

@@ -8,10 +8,15 @@
     "serve": "serve ."
   },
   "keywords": [],
-  "author": "",
+  "author": "cuixiaorui",
   "license": "ISC",
+  "dependencies": {
+    "@my-vue/compiler-core": "workspace:^1.0.0",
+    "@my-vue/runtime-dom": "workspace:^1.0.0",
+    "@my-vue/shared": "workspace:^1.0.0"
+  },
   "devDependencies": {
-    "cypress": "^12.6.0",
-    "serve": "^14.2.0"
+    "cypress": "^11.0.1",
+    "serve": "^14.1.1"
   }
 }

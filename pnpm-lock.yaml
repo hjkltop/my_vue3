@@ -29,13 +29,17 @@ importers:
       typescript: 4.9.5
       vitest: 0.28.5
 
+  packages/compiler-core:
+    specifiers:
+      '@my-vue/shared': workspace:^1.0.0
+    dependencies:
+      '@my-vue/shared': link:../shared
+
   packages/reactivity:
     specifiers:
       '@my-vue/shared': ^1.0.0
-      lodash: ^4.17.21
     dependencies:
       '@my-vue/shared': link:../shared
-      lodash: 4.17.21
 
   packages/runtime-core:
     specifiers:
@@ -45,15 +49,30 @@ importers:
       '@my-vue/reactivity': link:../reactivity
       '@my-vue/shared': link:../shared
 
+  packages/runtime-dom:
+    specifiers:
+      '@my-vue/runtime-core': workspace:^1.0.0
+      '@my-vue/shared': workspace:^1.0.0
+    dependencies:
+      '@my-vue/runtime-core': link:../runtime-core
+      '@my-vue/shared': link:../shared
+
   packages/shared:
     specifiers: {}
 
   packages/vue:
     specifiers:
-      cypress: ^12.6.0
-      serve: ^14.2.0
+      '@my-vue/compiler-core': workspace:^1.0.0
+      '@my-vue/runtime-dom': workspace:^1.0.0
+      '@my-vue/shared': workspace:^1.0.0
+      cypress: ^11.0.1
+      serve: ^14.1.1
+    dependencies:
+      '@my-vue/compiler-core': link:../compiler-core
+      '@my-vue/runtime-dom': link:../runtime-dom
+      '@my-vue/shared': link:../shared
     devDependencies:
-      cypress: 12.6.0
+      cypress: 11.2.0
       serve: 14.2.0
 
 packages:
@@ -1369,9 +1388,9 @@ packages:
       which: 2.0.2
     dev: true
 
-  /cypress/12.6.0:
-    resolution: {integrity: sha512-WdHSVaS1lumSd5XpVTslZd8ui9GIGphrzvXq9+3DtVhqjRZC5M70gu5SW/Y/SLPq3D1wiXGZoHC6HJ7ESVE2lw==}
-    engines: {node: ^14.0.0 || ^16.0.0 || >=18.0.0}
+  /cypress/11.2.0:
+    resolution: {integrity: sha512-u61UGwtu7lpsNWLUma/FKNOsrjcI6wleNmda/TyKHe0dOBcVjbCPlp1N6uwFZ0doXev7f/91YDpU9bqDCFeBLA==}
+    engines: {node: '>=12.0.0'}
     hasBin: true
     requiresBuild: true
     dependencies:
@@ -2020,6 +2039,7 @@ packages:
 
   /lodash/4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
+    dev: true
 
   /log-symbols/4.1.0:
     resolution: {integrity: sha512-8XPvpAA8uyhfteu8pIvQxpJZ7SYYdpUivZpGy6sFsBuKRY/7rQGavedeB8aK+Zkyq6upMFVL/9AW6vOYzfRyLg==}
